@@ -76,13 +76,20 @@ void creerEnfantEtLire(int prcNum)
 		pipe(fd);
 		int pid = fork();
 		if (pid == 0)
-		{ //child
+		{					//child
+			close(fd[0]);	// fermer l'entree du tuyau
+			dup2(fd[1], 1); //remplacer la sortie standard avec la sortie du tuyau
+			char prcNum_str[128];
+			snprintf(prcNum_str, sizeof prcNum_str, "%d", prcNum-1);
+			char *args[] = {"cpr", prcNum_str, NULL};
+			execvp(args[0], args);
 		}
 		else if (pid > 0)
 		{ //parent
 		}
 		else
 		{ //error
+			fprintf(stderr, "fork() ou exec() non-reussi.\n");
 		}
 	}
 	else //stop
