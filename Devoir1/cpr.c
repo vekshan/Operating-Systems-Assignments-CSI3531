@@ -1,8 +1,8 @@
 /*------------------------------------------------------------
 Fichier: cpr.c
 
-Nom:
-Numero d'etudiant:
+Nom: Vekshan Bundhoo, 
+Numero d'etudiant: 300035157, 
 
 Description: Ce programme contient le code pour la creation
              d'un processus enfant et y attacher un tuyau.
@@ -17,9 +17,11 @@ Explication du processus zombie
 -------------------------------------------------------------*/
 #include <stdio.h>
 #include <sys/select.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 /* Prototype */
-void creerEnfantEtLire(int );
+void creerEnfantEtLire(int);
 
 /*-------------------------------------------------------------
 Function: main
@@ -35,20 +37,21 @@ Description:
 
 int main(int ac, char **av)
 {
-    int numeroProcessus; 
+	int numeroProcessus;
 
-    if(ac == 2)
-    {
-       if(sscanf(av[1],"%d",&numeroProcessus) == 1)
-       {
-           creerEnfantEtLire(numeroProcessus);
-       }
-       else fprintf(stderr,"Ne peut pas traduire argument\n");
-    }
-    else fprintf(stderr,"Arguments pas valide\n");
-    return(0);
+	if (ac == 2)
+	{
+		if (sscanf(av[1], "%d", &numeroProcessus) == 1)
+		{
+			creerEnfantEtLire(numeroProcessus);
+		}
+		else
+			fprintf(stderr, "Ne peut pas traduire argument\n");
+	}
+	else
+		fprintf(stderr, "Arguments pas valide\n");
+	return (0);
 }
-
 
 /*-------------------------------------------------------------
 Function: creerEnfantEtLire
@@ -65,6 +68,31 @@ Description:
 void creerEnfantEtLire(int prcNum)
 {
 
-    /* S.V.P. completez cette fonction selon les
+	/* S.V.P. completez cette fonction selon les
        instructions du devoirs. */
+	if (prcNum > 1)
+	{
+		int fd[2]; //0 -> read, 1 -> write
+		pipe(fd);
+		int pid = fork();
+		if (pid == 0)
+		{					//child
+			close(fd[0]);	// fermer l'entree du tuyau
+			dup2(fd[1], 1); //remplacer la sortie standard avec la sortie du tuyau
+			char prcNum_str[128];
+			snprintf(prcNum_str, sizeof prcNum_str, "%d", prcNum-1);
+			char *args[] = {"cpr", prcNum_str, NULL};
+			execvp(args[0], args);
+		}
+		else if (pid > 0)
+		{ //parent
+		}
+		else
+		{ //error
+			fprintf(stderr, "fork() ou exec() non-reussi.\n");
+		}
+	}
+	else //stop
+	{
+	}
 }
