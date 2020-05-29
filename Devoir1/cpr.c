@@ -17,6 +17,8 @@ Explication du processus zombie
 -------------------------------------------------------------*/
 #include <stdio.h>
 #include <sys/select.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 /* Prototype */
 void creerEnfantEtLire(int);
@@ -70,7 +72,7 @@ void creerEnfantEtLire(int prcNum)
        instructions du devoirs. */
 	if (prcNum > 1)
 	{
-		int[2] fd; //0 -> read, 1 -> write
+		int fd[2]; //0 -> read, 1 -> write
 		pipe(fd);
 		int pid = fork();
 		if (pid == 0)
