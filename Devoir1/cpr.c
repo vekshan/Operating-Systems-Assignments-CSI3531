@@ -21,6 +21,7 @@ Explication du processus zombie
 #include <sys/types.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
 /* Prototype */
 void creerEnfantEtLire(int);
@@ -72,9 +73,9 @@ void creerEnfantEtLire(int prcNum)
 
 	/* S.V.P. completez cette fonction selon les
        instructions du devoirs. */
-	char buf[32];
-	snprintf(buf, sizeof(buf), "Processus %d commence\n", prcNum);
-	write(1, buf, strlen(buf));
+	int nbytes;
+	printf("Processus %d commence\n", prcNum);
+	fflush(stdout);
 	if (prcNum > 1)
 	{
 		int fd[2]; //0 -> read, 1 -> write
@@ -90,13 +91,33 @@ void creerEnfantEtLire(int prcNum)
 			close(fd[0]);	// fermer l'entree du tuyau - non utilisee
 			dup2(fd[1], 1); //remplacer la sortie standard avec la sortie du tuyau
 			char prcNum_str[32];
-			snprintf(prcNum_str, sizeof(prcNum_str), "%d", prcNum - 1);
+			sprintf(prcNum_str, "%d", prcNum - 1);
 			char *args[] = {"cpr", prcNum_str, NULL};
 			execvp(args[0], args);
 		}
 		else
 		{ //parent
+			close(fd[1]);
+			char readbuf[256];
+			nbytes = read(fd[0], readbuf, sizeof(readbuf));
+			if (nbytes > 0)
+			{
+				write(1, readbuf, nbytes);
+			}
+			else
+			{
+				perror("read() non-reussi.\n");
+				exit(1);
+			}
+			wait(NULL);
 		}
 	}
 	//stop
+	if (prcNum == 1)
+	{
+		sleep(5);
+	}
+	printf("Processus %d termine\n", prcNum);
+	fflush(stdout);
+	close(1);
 }
