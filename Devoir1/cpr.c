@@ -19,6 +19,8 @@ Explication du processus zombie
 #include <sys/select.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <string.h>
+#include <stdlib.h>
 
 /* Prototype */
 void creerEnfantEtLire(int);
@@ -70,29 +72,31 @@ void creerEnfantEtLire(int prcNum)
 
 	/* S.V.P. completez cette fonction selon les
        instructions du devoirs. */
+	char buf[32];
+	snprintf(buf, sizeof(buf), "Processus %d commence\n", prcNum);
+	write(1, buf, strlen(buf));
 	if (prcNum > 1)
 	{
 		int fd[2]; //0 -> read, 1 -> write
 		pipe(fd);
-		int pid = fork();
+		int pid;
+		if ((pid = fork()) == -1)
+		{
+			perror("fork() non-reussi.\n");
+			exit(1);
+		}
 		if (pid == 0)
 		{					//child
-			close(fd[0]);	// fermer l'entree du tuyau
+			close(fd[0]);	// fermer l'entree du tuyau - non utilisee
 			dup2(fd[1], 1); //remplacer la sortie standard avec la sortie du tuyau
-			char prcNum_str[128];
-			snprintf(prcNum_str, sizeof prcNum_str, "%d", prcNum-1);
+			char prcNum_str[32];
+			snprintf(prcNum_str, sizeof(prcNum_str), "%d", prcNum - 1);
 			char *args[] = {"cpr", prcNum_str, NULL};
 			execvp(args[0], args);
 		}
-		else if (pid > 0)
+		else
 		{ //parent
 		}
-		else
-		{ //error
-			fprintf(stderr, "fork() ou exec() non-reussi.\n");
-		}
 	}
-	else //stop
-	{
-	}
+	//stop
 }
