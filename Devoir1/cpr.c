@@ -73,7 +73,7 @@ void creerEnfantEtLire(int prcNum)
 
 	/* S.V.P. completez cette fonction selon les
        instructions du devoirs. */
-	int nbytes;
+	int nbytes = 0;
 	printf("Processus %d commence\n", prcNum);
 	fflush(stdout);
 	if (prcNum > 1)
@@ -98,16 +98,9 @@ void creerEnfantEtLire(int prcNum)
 		else
 		{ //parent
 			close(fd[1]);
-			char readbuf[256];
-			nbytes = read(fd[0], readbuf, sizeof(readbuf));
-			if (nbytes > 0)
-			{
+			char readbuf[512];
+            while((nbytes = read(fd[0], readbuf, 512)) > 0 ) {
 				write(1, readbuf, nbytes);
-			}
-			else
-			{
-				perror("read() non-reussi.\n");
-				exit(1);
 			}
 			wait(NULL);
 		}
