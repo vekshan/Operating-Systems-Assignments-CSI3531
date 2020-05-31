@@ -1,8 +1,8 @@
 /*------------------------------------------------------------
 Fichier: cpr.c
 
-Nom: Vekshan Bundhoo, 
-Numero d'etudiant: 300035157, 
+Nom: Vekshan Bundhoo, Bhavika Sewpal
+Numero d'etudiant: 300035157, 300089940
 
 Description: Ce programme contient le code pour la creation
              d'un processus enfant et y attacher un tuyau.
@@ -11,6 +11,7 @@ Description: Ce programme contient le code pour la creation
 
 Explication du processus zombie
 (point 5 de "A completer" dans le devoir):
+Le processus est un zombie car il a fini d'être exécuté mais il n'a pas été récolté par son parent.
 
 	(s.v.p. completez cette partie);
 
@@ -110,6 +111,7 @@ void creerEnfantEtLire(int prcNum)
 	{
 		sleep(5);
 	}
+	sleep(10);
 	printf("Processus %d termine\n", prcNum);
 	fflush(stdout);
 	close(1);
