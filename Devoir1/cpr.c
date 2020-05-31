@@ -10,8 +10,6 @@ Description: Ce programme contient le code pour la creation
 	     qui seront ensuite envoyes a la sortie standard.
 
 Explication du processus zombie
-(point 5 de "A completer" dans le devoir):
-Le processus est un zombie car il a fini d'être exécuté mais il n'a pas été récolté par son parent.
 
 	(s.v.p. completez cette partie);
 Le processus, "[cpr] <defunct>" est un zombie car il a fini d'être exécuté mais il n'a pas été récolté (reaped) par son parent. 
@@ -116,7 +114,6 @@ void creerEnfantEtLire(int prcNum)
 	{
 		sleep(5);
 	}
-	sleep(10);
 	printf("Processus %d termine\n", prcNum);
 	//sleep(10);
 	fflush(stdout);
