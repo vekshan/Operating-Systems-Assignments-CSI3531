@@ -14,6 +14,10 @@ Explication du processus zombie
 Le processus est un zombie car il a fini d'être exécuté mais il n'a pas été récolté par son parent.
 
 	(s.v.p. completez cette partie);
+Le processus, "[cpr] <defunct>" est un zombie car il a fini d'être exécuté mais il n'a pas été récolté (reaped) par son parent. 
+Pour recolter le processus, le parent doit faire appel à wait(). L'appel à wait() n'a  pas été requis dans ce devoir car le parent 
+se rendra compte qu'il ne peut plus lire le bout lecture du tuyau.
+(Veuillez noter que je ai commenté le sleep(10) dans le code - ligne 119.)
 
 -------------------------------------------------------------*/
 #include <stdio.h>
@@ -99,11 +103,12 @@ void creerEnfantEtLire(int prcNum)
 		else
 		{ //parent
 			close(fd[1]);
+			fflush(stdout);
 			char readbuf[512];
             while((nbytes = read(fd[0], readbuf, 512)) > 0 ) {
 				write(1, readbuf, nbytes);
 			}
-			wait(NULL);
+			//wait(NULL);
 		}
 	}
 	//stop
@@ -113,6 +118,7 @@ void creerEnfantEtLire(int prcNum)
 	}
 	sleep(10);
 	printf("Processus %d termine\n", prcNum);
+	//sleep(10);
 	fflush(stdout);
 	close(1);
 }
