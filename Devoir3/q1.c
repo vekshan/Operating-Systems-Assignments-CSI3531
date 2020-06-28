@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include <stdint.h>
 
 void *student_thread(void *param);
 void *ta_thread(void *param);
@@ -16,7 +17,7 @@ sem_t ta_sem;						  // semaphore to notify student that Ta is available
 
 void *student_thread(void *param)
 {
-	int student_no = (int)param;
+	int student_no = (intptr_t)param;
 
 	int programming = (rand() % 5) + 1;//time spent programming
 
@@ -30,7 +31,7 @@ void *student_thread(void *param)
 		waiting_seats--;
 
 		// notify TA, student is ready or wake him up
-		printf("Student %d needs help and is at position %d waiting for the TA.\n", student_no, 3 - waiting_seats);
+		printf("Student %d needs help and is at position %d .\n", student_no, 3 - waiting_seats);
 		sem_post(&students_sem);
 
 		// release mutex 
@@ -39,7 +40,7 @@ void *student_thread(void *param)
 		//wait for Ta to be available
 		sem_wait(&ta_sem);
 
-		printf("Student %d is is with Ta\n", student_no);
+		printf("Student %d is is with Ta.\n", student_no);
 	}
 	else
 	{
@@ -97,7 +98,7 @@ int main()
 	//create thread
 	for (int i = 0; i < 4 ; i++)
 	{
-			pthread_create(&student[i], &attr, student_thread, (void *)((int)(i+1)));	
+			pthread_create(&student[i], &attr, student_thread, (void *)((intptr_t)(i+1)));	
 	}
 
 	pthread_create(&ta, &attr, ta_thread, NULL);
@@ -108,9 +109,9 @@ int main()
 		pthread_join(student[i], NULL);
 	}
 
-	pthread_cancel(ta);
-	pthread_mutex_destroy(&access_waiting_seats);
-	sem_destroy(&students_sem);
-	sem_destroy(&ta_sem);
+	// pthread_cancel(ta);
+	// pthread_mutex_destroy(&access_waiting_seats);
+	// sem_destroy(&students_sem);
+	// sem_destroy(&ta_sem);
 
 }
