@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 	if (argc < 2)
 	{
 		numberOfStudents = 6;
-		//Use 5 students if not specified by user
+		//Use 6 students if not specified by user
 		printf("Number of Students not specified. Using default (5) students.\n");
 	}
 	else
