@@ -1,8 +1,7 @@
 /**
- * This code is based on the file shm-posix-producer.c.doc on brightspace.
+ * This code is based on the file shm-posix-consumer.c.doc on brightspace.
  * 
  */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +34,7 @@ int main()
 	}
 
 	/* now read from the shared memory region */
-	printf("%s",ptr);
+	printf("%s\n",(char*)ptr);
 
 	/* remove the shared memory segment */
 	if (shm_unlink(name) == -1) {
