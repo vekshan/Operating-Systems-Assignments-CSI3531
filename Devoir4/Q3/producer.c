@@ -26,10 +26,14 @@ int main(int ac, char **av)
             return -1;
         }
 
-        const int SIZE = 4096;
+        /* name of shared memory */
         const char *name = "OS";
+        const int SIZE = 4096;
 
+        /* file descriptor for fd */
         int shm_fd;
+
+        /* pointer to shared memory */
         void *ptr;
 
         /* create the shared memory segment */
@@ -38,7 +42,7 @@ int main(int ac, char **av)
         /* configure the size of the shared memory segment */
         ftruncate(shm_fd, SIZE);
 
-        /* now map the shared memory segment in the address space of the process */
+        /* memory map the shared memory */
         ptr = mmap(0, SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
         if (ptr == MAP_FAILED)
         {
@@ -53,14 +57,14 @@ int main(int ac, char **av)
          */
 
         int i;
-        
+
         for (i = 1; i <= n; i++)
         {
             char str[20];
             sprintf(str, "%d ", catalan(i));
             sprintf(ptr, "%s", str);
             ptr += strlen(str);
-            fprintf(stderr, "%d, %s\n",strlen(str),str);
+            fprintf(stderr, "Produced C%d: %s\n", i, str);
         }
 
         return 0;

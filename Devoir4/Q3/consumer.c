@@ -12,7 +12,7 @@
 
 int main()
 {
-    /* name of share memory */
+    /* name of shared memory */
 	const char *name = "OS";
 	const int SIZE = 4096;
 
@@ -28,17 +28,17 @@ int main()
 		exit(-1);
 	}
 
-	/* now map the shared memory segment in the address space of the process */
+	/* memory map the shared memory */
 	ptr = mmap(0,SIZE, PROT_READ, MAP_SHARED, shm_fd, 0);
 	if (ptr == MAP_FAILED) {
 		printf("Map failed\n");
 		exit(-1);
 	}
 
-	/* now read from the shared memory region */
-	printf("%s\n",(char*)ptr);
+	/* read from shared memory */
+	printf("Here is what is read from shared memory:\n%s\n",(char*)ptr);
 
-	/* remove the shared memory segment */
+	/* remove shared memory */
 	if (shm_unlink(name) == -1) {
 		printf("Error removing %s\n",name);
 		exit(-1);
