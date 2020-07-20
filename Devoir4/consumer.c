@@ -12,14 +12,16 @@
 
 int main()
 {
+    /* name of share memory */
 	const char *name = "OS";
 	const int SIZE = 4096;
 
+     /* file descriptor for fd */
 	int shm_fd;
 	void *ptr;
 	int i;
 
-	/* open the shared memory segment */
+	/* create the shared memory segment */
 	shm_fd = shm_open(name, O_RDONLY, 0666);
 	if (shm_fd == -1) {
 		printf("shared memory failed\n");
