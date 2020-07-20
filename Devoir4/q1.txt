@@ -1,0 +1,20 @@
+a.
+
+i. What the initial value of the counters is 
+Answer : All the counters are initialised to 0 at first.
+
+ii. When counters are increased
+Answer : A counter gets incremented by one when a new page becomes associated with the frame.
+
+iii. When counters are decreased
+Answer: A counter gets decremented by one when a page associated with the frame is no longer going to be used again.
+
+iv. How the page to be replaced is selected
+The page is replaced in the frame which has the lowest counter value associated to it.
+But if there is a tie (i.e. several counters have the same value), the FIFO alorithm is used.
+
+b.
+Number of faults: 14
+
+c.
+Number of faults: 11
